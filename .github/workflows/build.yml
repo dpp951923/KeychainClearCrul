@@ -1,0 +1,43 @@
+name: Build Rootless Debian Package
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: brew install make xz ldid
+
+      - name: Install Theos and SDKs
+        run: |
+          export THEOS="$HOME/theos"
+          git clone --recursive https://github.com/theos/theos.git "$THEOS"
+          rm -rf "$THEOS/sdks"
+          git clone --depth 1 https://github.com/theos/sdks.git "$THEOS/sdks"
+
+      - name: Build rootless package
+        env:
+          THEOS: /Users/runner/theos
+        run: |
+          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+
+      - name: Upload deb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeychainClear-rootless
+          path: packages/*.deb
+          if-no-files-found: error
+
+      - name: Create GitHub release asset
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: packages/*.deb
