@@ -62,7 +62,7 @@ static NSString *HandleCommand(NSString *command) {
 
 static NSData *HTTPResponse(NSString *body, NSInteger statusCode) {
     NSString *status = statusCode == 200 ? @"200 OK" : @"400 Bad Request";
-    NSString *header = [NSString stringWithFormat:@"HTTP/1.1 %@\r\nContent-Type: application/json\r\nContent-Length: %lu\r\nConnection: close\r\n\r\n", status, (unsigned long)body.lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    NSString *header = [NSString stringWithFormat:@"HTTP/1.1 %@\r\nContent-Type: application/json\r\nContent-Length: %lu\r\nConnection: close\r\n\r\n", status, (unsigned long)[body lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
     NSMutableData *data = [NSMutableData data];
     [data appendData:[header dataUsingEncoding:NSUTF8StringEncoding]];
     [data appendData:[body dataUsingEncoding:NSUTF8StringEncoding]];
