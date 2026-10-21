@@ -52,14 +52,6 @@ static NSString *RunClear(void) {
     }
 }
 
-static NSString *HandleCommand(NSString *command) {
-    NSString *value = [command stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([value isEqualToString:@"ping"]) return @"pong\n";
-    if ([value isEqualToString:@"status"]) return @"ready\n";
-    if ([value isEqualToString:@"clear"]) return RunClear();
-    return @"error: unknown command\n";
-}
-
 static NSData *HTTPResponse(NSString *body, NSInteger statusCode) {
     NSString *status = statusCode == 200 ? @"200 OK" : @"400 Bad Request";
     NSString *header = [NSString stringWithFormat:@"HTTP/1.1 %@\r\nContent-Type: application/json\r\nContent-Length: %lu\r\nConnection: close\r\n\r\n", status, (unsigned long)[body lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
