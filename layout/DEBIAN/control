@@ -1,0 +1,9 @@
+Package: com.example.keychainclearcrul
+Name: KeychainClearCrul
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: Rootless Keychain control tweak with HTTP interface
+Maintainer: DP
+Author: DP
+Section: Tweaks
+Depends: firmware (>= 15.0)
